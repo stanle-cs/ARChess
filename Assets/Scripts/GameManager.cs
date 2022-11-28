@@ -121,34 +121,15 @@ public class GameManager : MonoBehaviour
     {
         ReadMoves();
 
-        // Update move list
-        foreach (var piece in chessPieces.Values)
-        {
-            piece.GenerateMoves();
-
-            foreach (var position in piece.possibleMove)
-            {
-                for (int i = 1; i < 9; i++)
-                {
-                    for (int j = 1; j < 9; j++)
-                    {
-                        if (position.rank == 1 && position.file == j)
-                        {
-                            snapGrid.snapArray[i, j].GetComponent<MoveColor>().Green();
-                        } 
-                    }
-                }
-            }
-        }
-
+        UpdatePossibleMoveList();
 
         //ExecuteFirstMove();
     }
 
     // Update is called once per frame
     void Update()
-    {    
-
+    {
+        UpdatePossibleMoveList();
     }
 
     /* METHODS */
@@ -219,8 +200,24 @@ public class GameManager : MonoBehaviour
 
     void UpdatePossibleMoveList()
     {
+        // Wipe clean
+        foreach (var tile in snapGrid.snapArray)
+        {
+            tile.GetComponent<MoveColor>().Reset();
+        }
+        // Update move list
+        foreach (var piece in chessPieces.Values)
+        {
+            piece.GenerateMoves();
+
+            foreach (var position in piece.possibleMove)
+            {
+                snapGrid.snapArray[position.rank, position.file].GetComponent<MoveColor>().Green();
+            }
+        }
 
     }
+
     // Move the specified piece to the correct square
     public void MovePiece(string name, int toFile, int toRank)
     {
@@ -230,6 +227,7 @@ public class GameManager : MonoBehaviour
         gameState[name].UpdateSquare(toFile, toRank);
         // actual movement
         chessPieces[name].gameObject.transform.position= snapGrid.snapArray[toFile, toRank].transform.position;
+        chessPieces[name].Move(toFile, toRank);
         // make space unavailable
         occupied[toFile, toRank] = true;
     }
@@ -241,11 +239,13 @@ public class GameManager : MonoBehaviour
         Move firstMove = moves[0];
         // Round up all pieces of this type
         List<string> pieces = GetPieces(firstMove.piece);
-        string chosenPiece ="";
+        //string chosenPiece ="";
         // figure out which piece is this?
         // Is its list of possible moves contains the toSquare?
 
     }
+
+    // Get all the pieces of this kind
     List<string> GetPieces(char kind)
     {
 

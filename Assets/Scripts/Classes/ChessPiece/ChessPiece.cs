@@ -34,4 +34,12 @@ public abstract class ChessPiece
     }
     public abstract void GenerateMoves();
 
+    public virtual void Move(int toRank, int toFile) 
+    {
+        this.square.rank = toRank;
+        this.square.file = toFile;
+
+        GenerateMoves();
+    }
+
 }

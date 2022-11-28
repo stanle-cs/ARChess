@@ -52,8 +52,8 @@ public class SnapGrid : MonoBehaviour
                                                               piece.transform.localRotation.z,
                                                               piece.transform.localRotation.w);
                 gameManager.MovePiece(piece.name,
-                                      gameManager.gameState[piece.name].file,
-                                      gameManager.gameState[piece.name].rank);
+                                      gameManager.chessPieces[piece.name].square.rank,
+                                      gameManager.chessPieces[piece.name].square.file);
             }
 
             // Snap to grid
